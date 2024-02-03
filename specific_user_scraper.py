@@ -11,9 +11,10 @@ import os
 import time
 import uuid
 from dotenv import load_dotenv
+import sys
 
 
-class InstaStoryScraper:
+class SpecificUserStoryScraper:
     """
     A class for scraping stories, and downloading the result.
     ...
@@ -74,7 +75,7 @@ class InstaStoryScraper:
             if not os.path.exists(dir): os.makedirs(dir)
             df = pd.read_pickle(file_path)
             for i, row in df.iterrows():
-                InstaStoryScraper.download(row["Content URL"], row["is_video"], dir)
+                SpecificUserStoryScraper.download(row["Content URL"], row["is_video"], dir)
 
     def scraper(self):
         """
@@ -177,9 +178,11 @@ class InstaStoryScraper:
             driver.quit()
             print(colored("\n[SUCCESS]: Scrapped all stories for the last 24h. \n", "green"))
 
-
-username = input(colored("\n[INFO]: Please type the username you want to scrap stories from: ", "yellow"))
-scrp = InstaStoryScraper(username)
+if len(sys.argv) > 1:
+    username = sys.argv[1]
+else:
+    username = input(colored("\n[INFO]: Please type the username you want to scrap stories from: ", "yellow"))
+scrp = SpecificUserStoryScraper(username)
 scrp.scraper()
 scrp.download_all()
 
