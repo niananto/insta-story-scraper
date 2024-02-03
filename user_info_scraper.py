@@ -18,6 +18,7 @@ class UserInfoScraper:
     Attributes
     ----------
     :param username: username for the account to scrap.
+    :param chrome_driver_path: path to the chrome driver.
 
     Methods
     -------
@@ -25,7 +26,7 @@ class UserInfoScraper:
 
     """
 
-    def __init__(self, username):
+    def __init__(self, username, chrome_driver_path):
         """
         Constructs all the necessary attributes for the SpecificUserStoryScraper object.
         :param username: username for the account to scrap.
@@ -38,6 +39,7 @@ class UserInfoScraper:
         self.project_direc = '/'.join(os.getcwd().split('/')[:-1])
         self.login_page = "https://www.instagram.com/accounts/login/"
         self.story_link = "https://www.instagram.com/stories/{}/".format(username)
+        self.chrome_driver_path = chrome_driver_path
         
     def scraper(self):
         """
@@ -45,7 +47,8 @@ class UserInfoScraper:
         :return:
         """
         
-        service = Service("chromedriver_win64\chromedriver.exe")
+        # service = Service("chromedriver_win64\chromedriver.exe")
+        service = Service(self.chrome_driver_path)
         options = Options()
         # options.add_argument("--headless")
         options.add_argument("--window-size=1920,1080")
@@ -117,7 +120,13 @@ def main():
         username = sys.argv[1]
     else:
         username = input("Enter the username of the account: ")
-    scraper = UserInfoScraper(username)
+    
+    if len(sys.argv) > 2:
+        chrome_driver_path = sys.argv[2]
+    else:
+        chrome_driver_path = os.path.join(os.getcwd(), "chromedriver_win64", "chromedriver.exe")
+        
+    scraper = UserInfoScraper(username, chrome_driver_path)
     scraper.scraper()
     
-# main()
+main()
