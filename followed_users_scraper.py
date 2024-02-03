@@ -197,26 +197,9 @@ class FollowedUsersStoryScraper:
             
         print(colored("\n[SUCCESS]: Scrapped all stories for the last 24h. \n", "green"))
 
+def main():
+    scrp = FollowedUsersStoryScraper()
+    scrp.scraper()
+    scrp.download_all()
 
-scrp = FollowedUsersStoryScraper()
-scrp.scraper()
-scrp.download_all()
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+# main()

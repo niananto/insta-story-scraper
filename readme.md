@@ -7,18 +7,29 @@ This project contains scripts to scrape Instagram data.
 ### [specific_user_scraper.py](specific_user_scraper.py)
 This script is used to scrape Instagram data for a specific user. It uses the `InstaStoryScraper` class to scrape the user's Instagram stories.
 
-Usage:
+Usage:  
+uncomment the last line and run this replacing the `<username>` with the Instagram username you want to scrape.
 ```bash
 python specific_user_scraper.py <username>
 ```
-Replace <username> with the Instagram username you want to scrape.
 
 ### [followed_users_scraper.py](followed_users_scraper.py)
 This script is used to scrape Instagram data for users followed by a specific account. It uses the FollowedUsersStoryScraper class to scrape the Instagram stories of the followed users.
 
-Usage:
+Usage:  
+uncomment the last line and run this-
 ```bash
 python followed_users_scraper.py
+```
+
+## IMPORT
+```python
+from specific_user_scraper import SpecificUserStoryScraper
+
+
+```
+```python
+from followed_users_scraper import FollowedUsersStoryScraper
 ```
 
 ## Dependencies

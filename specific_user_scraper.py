@@ -178,21 +178,13 @@ class SpecificUserStoryScraper:
             driver.quit()
             print(colored("\n[SUCCESS]: Scrapped all stories for the last 24h. \n", "green"))
 
-if len(sys.argv) > 1:
-    username = sys.argv[1]
-else:
-    username = input(colored("\n[INFO]: Please type the username you want to scrap stories from: ", "yellow"))
-scrp = SpecificUserStoryScraper(username)
-scrp.scraper()
-scrp.download_all()
+def main():
+    if len(sys.argv) > 1:
+        username = sys.argv[1]
+    else:
+        username = input(colored("\n[INFO]: Please type the username you want to scrap stories from: ", "yellow"))
+    scrp = SpecificUserStoryScraper(username)
+    scrp.scraper()
+    scrp.download_all()
 
-
-
-
-
-
-
-
-
-
-
+# main()
