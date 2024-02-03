@@ -31,10 +31,11 @@ class SpecificUserStoryScraper:
 
     """
 
-    def __init__(self, username):
+    def __init__(self, username, chrome_driver_path):
         """
         Constructs all the necessary attributes for the SpecificUserStoryScraper object.
         :param username: username for the account to scrap.
+        :param chrome_driver_path: path to the chrome driver.
         """
         load_dotenv()
         self.usr = os.getenv("USR")
@@ -44,6 +45,7 @@ class SpecificUserStoryScraper:
         self.project_direc = '/'.join(os.getcwd().split('/')[:-1])
         self.login_page = "https://www.instagram.com/accounts/login/"
         self.story_link = "https://www.instagram.com/stories/{}/".format(username)
+        self.chrome_driver_path = chrome_driver_path
 
     @staticmethod
     def download(url, is_video, dir):
@@ -67,7 +69,7 @@ class SpecificUserStoryScraper:
         Download all scraped content.
         :return:
         """
-        file_path = os.path.join(self.project_direc, "collected_data/stories_{}.pkl".format(self.username))
+        file_path = os.path.join(self.project_direc, "collected_data/pickles/stories_{}.pkl".format(self.username))
         if not os.path.exists(file_path):
             print(colored("\n[ERROR]: Can't download, stories were not scraped. \n", "red"))
         else:
@@ -83,9 +85,10 @@ class SpecificUserStoryScraper:
         :return:
         """
         # Specify Chrome driver options
-        service = Service("chromedriver_win64\chromedriver.exe")
+        # service = Service("chromedriver_win64\chromedriver.exe")
+        service = Service(self.chrome_driver_path)
         options = Options()
-        options.add_argument("--headless")
+        # options.add_argument("--headless")
         options.add_argument("--window-size=1920,1080")
         options.add_argument('--ignore-certificate-errors')
         options.add_argument('--allow-running-insecure-content')
@@ -183,7 +186,13 @@ def main():
         username = sys.argv[1]
     else:
         username = input(colored("\n[INFO]: Please type the username you want to scrap stories from: ", "yellow"))
-    scrp = SpecificUserStoryScraper(username)
+        
+    if len(sys.argv) > 2:
+        chrome_driver_path = sys.argv[2]
+    else:
+        chrome_driver_path = os.path.join(os.getcwd(), "chromedriver_win64", "chromedriver.exe")
+        
+    scrp = SpecificUserStoryScraper(username, chrome_driver_path)
     scrp.scraper()
     scrp.download_all()
 

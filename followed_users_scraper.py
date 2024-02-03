@@ -13,6 +13,7 @@ import os
 import time
 import uuid
 from dotenv import load_dotenv
+import sys
 
 
 class FollowedUsersStoryScraper:
@@ -29,9 +30,10 @@ class FollowedUsersStoryScraper:
 
     """
 
-    def __init__(self):
+    def __init__(self, chrome_driver_path):
         """
         Constructs all the necessary attributes for the FollowedUsersStoryScraper object.
+        :param chrome_driver_path: Path to the Chrome driver.
         """
         load_dotenv()
         self.usr = os.getenv("USR")
@@ -39,6 +41,7 @@ class FollowedUsersStoryScraper:
         # print(self.usr, self.pswd)
         self.project_direc = '/'.join(os.getcwd().split('/')[:-1])
         self.login_page = "https://www.instagram.com/accounts/login/"
+        self.chrome_driver_path = chrome_driver_path
         self.results = {}
 
     @staticmethod
@@ -80,9 +83,10 @@ class FollowedUsersStoryScraper:
         :return:
         """
         # Specify Chrome driver options
-        service = Service("chromedriver_win64\chromedriver.exe")
+        # service = Service("chromedriver_win64\chromedriver.exe")
+        service = Service(self.chrome_driver_path)
         options = Options()
-        options.add_argument("--headless")
+        # options.add_argument("--headless")
         options.add_argument("--window-size=1920,1080")
         options.add_argument('--ignore-certificate-errors')
         options.add_argument('--allow-running-insecure-content')
@@ -146,10 +150,13 @@ class FollowedUsersStoryScraper:
                 
             except:
                 is_video = True
-                probable_elements = driver.find_elements(By.CSS_SELECTOR, 'video')
-                for element in probable_elements:
-                    print(element.get_attribute('innerHTML'))
-                content_link = probable_elements[0].get_attribute('src')
+                try:
+                    probable_elements = driver.find_elements(By.CSS_SELECTOR, 'video')
+                    for element in probable_elements:
+                        print(element.get_attribute('innerHTML'))
+                    content_link = probable_elements[0].get_attribute('src')
+                except:
+                    content_link = "https://picsum.photos/200/300"
                 
             print(colored(f"\n[SUCCESS]: Got the content link:\n\t{content_link}. \n", "green"))
 
@@ -194,8 +201,13 @@ class FollowedUsersStoryScraper:
         print(colored("\n[SUCCESS]: Scrapped all stories for the last 24h. \n", "green"))
 
 def main():
-    scrp = FollowedUsersStoryScraper()
+    if len(sys.argv) > 1:
+        chrome_driver_path = sys.argv[2]
+    else:
+        chrome_driver_path = os.path.join(os.getcwd(), "chromedriver_win64", "chromedriver.exe")
+        
+    scrp = FollowedUsersStoryScraper(chrome_driver_path)
     scrp.scraper()
     scrp.download_all()
 
-# main()
+main()
