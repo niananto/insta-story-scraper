@@ -17,25 +17,21 @@ from dotenv import load_dotenv
 
 class FollowedUsersStoryScraper:
     """
-    A class for scraping stories, and downloading the result.
+    A class for scraping stories, and downloading the result of the users that the account follows.
     ...
 
-    Attributes
-    ----------
-    :param username: username for the account to scrap.
 
     Methods
     -------
     download(url, is_video, dir): Download a content given its url.
     download_all(): Download all scraped content.
-    scraper(): Scrap stories from Instagram account.
+    scraper(): Scrap stories from followed Instagram accounts.
 
     """
 
     def __init__(self):
         """
-        Constructs all the necessary attributes for the InstaStoryScraper object.
-        :param username: username for the account to scrap.
+        Constructs all the necessary attributes for the FollowedUsersStoryScraper object.
         """
         load_dotenv()
         self.usr = os.getenv("USR")
@@ -86,7 +82,7 @@ class FollowedUsersStoryScraper:
         # Specify Chrome driver options
         service = Service("chromedriver_win64\chromedriver.exe")
         options = Options()
-        # options.add_argument("--headless")
+        options.add_argument("--headless")
         options.add_argument("--window-size=1920,1080")
         options.add_argument('--ignore-certificate-errors')
         options.add_argument('--allow-running-insecure-content')
