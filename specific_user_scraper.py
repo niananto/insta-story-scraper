@@ -171,7 +171,7 @@ class InstaStoryScraper:
 
             # Save scrapped data into a dataframe
             df = pd.DataFrame(rows)
-            tmp = os.path.join(self.project_direc, "collected_data")
+            tmp = os.path.join(self.project_direc, "collected_data", "pickles")
             if not os.path.exists(tmp): os.makedirs(tmp)
             df.to_pickle(os.path.join(tmp, "stories_{}.pkl".format(self.username)))
             driver.quit()
